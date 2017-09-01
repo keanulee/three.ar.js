@@ -72,6 +72,7 @@
 </div>
 <script src="../third_party/three.js/three.js"></script>
 <script src="../third_party/three.js/VRControls.js"></script>
+<script src="../third_party/three.js/OBJLoader.js"></script>
 <script src="../dist/three.ar.js"></script>
 <script>
 
@@ -164,6 +165,21 @@ function init() {
   }
   var material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
   cube = new THREE.Mesh(geometry, material);
+  
+  var loader = new THREE.OBJLoader(); 
+  loader.load('https://polymer.github.io/ar-logo/models/p-logo.obj', function (object) {
+    var material  = new THREE.MeshNormalMaterial({
+      transparent : true,
+      opacity: 0.8,
+      side: THREE.DoubleSide
+    });
+    object.traverse(function (child) {
+      if (child instanceof THREE.Mesh) {
+        child.material = material;
+      }
+    });
+    cube = object;
+  });
 
   // Bind our event handlers
   window.addEventListener('resize', onWindowResize, false);
